@@ -9,13 +9,14 @@ export const useTasks = () => {
     setTasks(storedTasks);
   }, []);
 
-  const addTask = (text) => {
+  const addTask = (text, priority) => {
     if (!text.trim()) return;
 
     const newTask = {
       id: crypto.randomUUID(),
       text,
       completed: false,
+      priority,
     };
 
     setTasks((prev) => [...prev, newTask]);

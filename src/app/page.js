@@ -10,10 +10,11 @@ export default function Home() {
 
   const [input, setInput] = useState("");
   const [filter, setFilter] = useState("all");
+  const [priority, setPriority] = useState("low");
 
   const handleAdd = () => {
     if (!input.trim()) return;
-    addTask(input);
+    addTask(input, priority);
     setInput("");
   };
 
@@ -34,6 +35,17 @@ export default function Home() {
           onChange={(e) => setInput(e.target.value)}
           placeholder="Enter task..."
         />
+
+        <select
+          className={styles.select}
+          value={priority}
+          onChange={(e) => setPriority(e.target.value)}
+        >
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+
         <button className={styles.button} onClick={handleAdd}>
           Add
         </button>
