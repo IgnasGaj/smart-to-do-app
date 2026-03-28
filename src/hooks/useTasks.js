@@ -9,7 +9,7 @@ export const useTasks = () => {
     setTasks(storedTasks);
   }, []);
 
-  const addTask = (text, priority) => {
+  const addTask = (text, priority, dueDate) => {
     if (!text.trim()) return;
 
     const newTask = {
@@ -17,6 +17,7 @@ export const useTasks = () => {
       text,
       completed: false,
       priority,
+      dueDate,
     };
 
     setTasks((prev) => [...prev, newTask]);

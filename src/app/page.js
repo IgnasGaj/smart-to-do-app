@@ -11,18 +11,34 @@ export default function Home() {
   const [input, setInput] = useState("");
   const [filter, setFilter] = useState("all");
   const [priority, setPriority] = useState("low");
+  const [dueDate, setDueDate] = useState("");
+  const [search, setSearch] = useState("");
 
   const handleAdd = () => {
     if (!input.trim()) return;
-    addTask(input, priority);
+
+    addTask(input, priority, dueDate);
     setInput("");
+    setDueDate("");
   };
 
-  const filteredTasks = tasks.filter((task) => {
-    if (filter === "active") return !task.completed;
-    if (filter === "completed") return task.completed;
-    return true;
-  });
+  const filteredTasks = tasks
+    .filter((task) => {
+      const matchesSearch = task.text
+        .toLowerCase()
+        .includes(search.toLowerCase());
+
+      if (filter === "active") return !task.completed && matchesSearch;
+      if (filter === "completed") return task.completed && matchesSearch;
+
+      return matchesSearch;
+    })
+    .sort((a, b) => {
+      if (!a.dueDate) return 1;
+      if (!b.dueDate) return -1;
+
+      return new Date(a.dueDate) - new Date(b.dueDate);
+    });
 
   return (
     <main className={styles.container}>
@@ -45,6 +61,12 @@ export default function Home() {
           <option value="medium">Medium</option>
           <option value="high">High</option>
         </select>
+        <input
+          type="date"
+          value={dueDate}
+          onChange={(e) => setDueDate(e.target.value)}
+          className={styles.input}
+        />
 
         <button className={styles.button} onClick={handleAdd}>
           Add
@@ -79,6 +101,14 @@ export default function Home() {
           Completed
         </button>
       </div>
+
+      <input
+        type="text"
+        placeholder="Search tasks..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className={styles.search}
+      />
 
       <TaskList
         tasks={filteredTasks}
